@@ -1,4 +1,4 @@
-import 'package:alquran/app/data/models/surah.dart';
+import '../../../data/models/surah.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
