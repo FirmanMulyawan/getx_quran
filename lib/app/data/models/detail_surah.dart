@@ -1,10 +1,3 @@
-import 'dart:convert';
-
-DetailSurah detailSurahFromJson(String str) =>
-    DetailSurah.fromJson(json.decode(str));
-
-String detailSurahToJson(DetailSurah data) => json.encode(data.toJson());
-
 class DetailSurah {
   final int? number;
   final int? sequence;

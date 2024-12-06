@@ -66,7 +66,7 @@ class DetailSurahView extends GetView<DetailSurahController> {
                   itemCount: snapshot.data?.verses?.length,
                   itemBuilder: (context, index) {
                     if (snapshot.data?.verses == null ||
-                        snapshot.data?.verses?.length == 0) {
+                        snapshot.data?.verses?.isEmpty == true) {
                       return const SizedBox();
                     }
 
