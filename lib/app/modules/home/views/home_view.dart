@@ -14,6 +14,11 @@ class HomeView extends GetView<HomeController> {
       appBar: AppBar(
         title: const Text('HomeView'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () => Get.toNamed(Routes.searchSurah),
+              icon: const Icon(Icons.search))
+        ],
       ),
       body: FutureBuilder<List<Surah>>(
           future: controller.getAllSurah(),

@@ -1,4 +1,5 @@
 import '../../../../component/config/app_style.dart';
+import '../../../../component/config/app_theme.dart';
 import '../../../routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -19,10 +20,7 @@ class IntroductionView extends GetView<IntroductionController> {
           children: [
             const Text(
               "Al-Quran Apps",
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: AppStyle.purple),
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             const Gap(20),
             const Padding(
@@ -33,18 +31,30 @@ class IntroductionView extends GetView<IntroductionController> {
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ),
-            const Gap(10),
-            SizedBox(
-                width: 300,
-                height: 300,
-                child: Lottie.asset("assets/lotties/animasi-quran-3.json")),
+            const Gap(40),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(AppTheme.textSize2Xl),
+              child: SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: Lottie.asset("assets/lotties/animasi-quran-3.json")),
+            ),
             const Gap(30),
             ElevatedButton(
               onPressed: () => Get.offAllNamed(Routes.home),
               style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: AppStyle.purple),
-              child: const Text("Get Started"),
+                  backgroundColor:
+                      Get.isDarkMode ? AppStyle.white : AppStyle.purple,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15)),
+              child: Text(
+                "Get Started",
+                style: TextStyle(
+                    color:
+                        Get.isDarkMode ? AppStyle.purpleDark : AppStyle.white),
+              ),
             )
           ],
         ),
