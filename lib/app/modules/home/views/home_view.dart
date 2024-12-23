@@ -1,10 +1,17 @@
+import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
+import 'package:gap/gap.dart';
+
+import '../../../../component/config/app_const.dart';
+import '../../../../component/config/app_style.dart';
+import '../../../../component/config/app_theme.dart';
 import '../../../routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../../../data/models/surah.dart';
 import '../controllers/home_controller.dart';
+import 'juzz/juzz.dart';
+import 'surah/surah.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -12,7 +19,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HomeView'),
+        title: const Text('Al Quran Apps'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -20,38 +27,132 @@ class HomeView extends GetView<HomeController> {
               icon: const Icon(Icons.search))
         ],
       ),
-      body: FutureBuilder<List<Surah>>(
-          future: controller.getAllSurah(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            if (!snapshot.hasData) {
-              return const Text("Tidak ada data");
-            }
-
-            return ListView.builder(
-              itemCount: snapshot.data?.length ?? 0,
-              itemBuilder: (context, index) {
-                Surah? surah = snapshot.data?[index];
-                return ListTile(
-                  onTap: () {
-                    Get.toNamed(Routes.detailSurah, arguments: surah);
-                  },
-                  leading: CircleAvatar(
-                    child: Text("${surah?.number}"),
+      body: DefaultTabController(
+        length: 3,
+        initialIndex: controller.selectedIndex.value,
+        child: Padding(
+          padding: const EdgeInsets.only(
+              top: AppTheme.textSize2Xl,
+              left: AppTheme.textSize2Xl,
+              right: AppTheme.textSize2Xl),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Assalamualaikum",
+                style: TextStyle(
+                    fontSize: AppTheme.textSize2Xl,
+                    fontWeight: FontWeight.bold),
+              ),
+              const Gap(20),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: const LinearGradient(colors: [
+                      AppStyle.purpleLight1,
+                      AppStyle.purpleDark,
+                    ])),
+                child: Material(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: () => Get.toNamed(Routes.lastRead),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                            bottom: -50,
+                            right: 0,
+                            child: Opacity(
+                              opacity: 0.7,
+                              child: SizedBox(
+                                  width: 200,
+                                  height: 200,
+                                  child: Image.asset(
+                                    AppConst.imageAlquran,
+                                    fit: BoxFit.contain,
+                                  )),
+                            )),
+                        const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.menu_book_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Gap(10),
+                                  Text(
+                                    "Terakhir di baca",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              Gap(30),
+                              Text(
+                                "Al-Fatihah",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: AppTheme.textSize2Xl),
+                              ),
+                              Text(
+                                "Juz 1 | Ayat 5",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  title: Text("${surah?.name?.transliteration?.id ?? '-'} "),
-                  subtitle: Text(
-                      "${surah?.numberOfVerses} Ayat | ${surah?.revelation?.id}"),
-                  trailing: Text("${surah?.name?.short}"),
-                );
-              },
-            );
-          }),
+                ),
+              ),
+              const Gap(20),
+              TabBar(
+                  dividerHeight: 0,
+                  labelColor:
+                      Get.isDarkMode ? AppStyle.white : AppStyle.purpleDark,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorColor: AppStyle.purpleDark,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  onTap: (value) {
+                    controller.selectedIndex.value = value;
+                  },
+                  // indicator: BoxDecoration(
+                  //   color: Colors.blueAccent,
+                  //   borderRadius: BorderRadius.circular(10),
+                  //   border: Border.all(color: Colors.black, width: 2),
+                  // ),
+                  tabs: const [
+                    Tab(
+                      text: "Surah",
+                    ),
+                    Tab(
+                      text: "Juzz",
+                    ),
+                    Tab(
+                      text: "Bookmark",
+                    ),
+                  ]),
+              Expanded(
+                child: Obx(() => LazyIndexedStack(
+                        index: controller.selectedIndex.value,
+                        children: const [
+                          SurahView(),
+                          JuzzView(),
+                          Text("page 3"),
+                        ])),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

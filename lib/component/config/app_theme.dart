@@ -19,10 +19,13 @@ class AppTheme {
   var horizontalPadding = 15.0;
 
   static final ThemeData themeLight = ThemeData(
+      brightness: Brightness.light,
       primaryColor: AppStyle.purple,
       scaffoldBackgroundColor: AppStyle.white,
       appBarTheme: const AppBarTheme(
-          backgroundColor: AppStyle.purple, foregroundColor: Colors.white),
+          elevation: 4,
+          backgroundColor: AppStyle.purple,
+          foregroundColor: Colors.white),
       textTheme: const TextTheme(
         bodyMedium: TextStyle(color: AppStyle.purpleDark),
         bodyLarge: TextStyle(color: AppStyle.purpleDark),
@@ -30,10 +33,13 @@ class AppTheme {
       ));
 
   static final ThemeData themeDark = ThemeData(
+      brightness: Brightness.dark,
       primaryColor: AppStyle.purpleLight2,
       scaffoldBackgroundColor: AppStyle.purpleDark,
       appBarTheme: const AppBarTheme(
-          backgroundColor: AppStyle.purpleDark, foregroundColor: Colors.white),
+          elevation: 0,
+          backgroundColor: AppStyle.purpleDark,
+          foregroundColor: Colors.white),
       textTheme: const TextTheme(
         bodyMedium: TextStyle(color: AppStyle.white),
         bodyLarge: TextStyle(color: AppStyle.white),

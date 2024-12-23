@@ -4,11 +4,11 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '../../../data/models/detail_surah.dart' as detail;
-import '../../../data/models/surah.dart';
+import '../../../data/models/ayat.dart' as s;
 import '../controllers/detail_surah_controller.dart';
 
 class DetailSurahView extends GetView<DetailSurahController> {
-  final Surah surah = Get.arguments;
+  final s.Surah surah = Get.arguments;
 
   DetailSurahView({super.key});
   @override
