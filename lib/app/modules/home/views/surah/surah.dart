@@ -1,5 +1,4 @@
 import '../../../../../component/config/app_const.dart';
-import '../../../../../component/config/app_style.dart';
 import '../../../../data/models/ayat.dart' as s;
 import '../../../../routes/app_pages.dart';
 import 'surah_controller.dart';
@@ -32,39 +31,30 @@ class SurahView extends GetView<SurahController> {
                 onTap: () {
                   Get.toNamed(Routes.detailSurah, arguments: surah);
                 },
-                leading: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(Get.isDarkMode
-                              ? AppConst.imageListDark
-                              : AppConst.imageList))),
-                  child: Center(
-                      child: Text(
-                    "${surah?.number}",
-                    style: TextStyle(
-                      color:
-                          Get.isDarkMode ? AppStyle.white : AppStyle.purpleDark,
-                    ),
-                  )),
-                ),
+                leading: Obx(() => Container(
+                      height: 35,
+                      width: 35,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(controller.isDark.isTrue
+                                  ? AppConst.imageListDark
+                                  : AppConst.imageList))),
+                      child: Center(
+                          child: Text(
+                        "${surah?.number}",
+                      )),
+                    )),
                 title: Text(
                   "${surah?.name?.transliteration?.id ?? '-'} ",
-                  style: TextStyle(
-                    color:
-                        Get.isDarkMode ? AppStyle.white : AppStyle.purpleDark,
-                  ),
                 ),
                 subtitle: Text(
                   "${surah?.numberOfVerses} Ayat | ${surah?.revelation?.id}",
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                  ),
                 ),
                 trailing: Text(
                   "${surah?.name?.short}",
-                  style: TextStyle(
-                    color:
-                        Get.isDarkMode ? AppStyle.white : AppStyle.purpleDark,
-                  ),
                 ),
               );
             },

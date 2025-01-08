@@ -12,11 +12,19 @@ import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 import 'juzz/juzz.dart';
 import 'surah/surah.dart';
+import 'surah/surah_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  const HomeView({super.key});
+  final surahController = Get.find<SurahController>();
+
+  HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
+    if (Get.isDarkMode) {
+      surahController.isDark.value = true;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Al Quran Apps'),
@@ -116,10 +124,6 @@ class HomeView extends GetView<HomeController> {
               const Gap(20),
               TabBar(
                   dividerHeight: 0,
-                  labelColor:
-                      Get.isDarkMode ? AppStyle.white : AppStyle.purpleDark,
-                  unselectedLabelColor: Colors.grey,
-                  indicatorColor: AppStyle.purpleDark,
                   indicatorSize: TabBarIndicatorSize.tab,
                   onTap: (value) {
                     controller.selectedIndex.value = value;
@@ -143,15 +147,27 @@ class HomeView extends GetView<HomeController> {
               Expanded(
                 child: Obx(() => LazyIndexedStack(
                         index: controller.selectedIndex.value,
-                        children: const [
-                          SurahView(),
+                        children: [
+                          const SurahView(),
                           JuzzView(),
-                          Text("page 3"),
+                          const Text("page 3"),
                         ])),
               )
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.isDarkMode
+              ? Get.changeTheme(AppTheme.themeLight)
+              : Get.changeTheme(AppTheme.themeDark);
+          surahController.isDark.toggle();
+        },
+        child: Obx(() => Icon(Icons.color_lens,
+            color: surahController.isDark.isTrue
+                ? AppStyle.purpleDark
+                : AppStyle.white)),
       ),
     );
   }

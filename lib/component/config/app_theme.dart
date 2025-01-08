@@ -20,6 +20,9 @@ class AppTheme {
 
   static final ThemeData themeLight = ThemeData(
       brightness: Brightness.light,
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppStyle.purpleDark,
+      ),
       primaryColor: AppStyle.purple,
       scaffoldBackgroundColor: AppStyle.white,
       appBarTheme: const AppBarTheme(
@@ -30,10 +33,21 @@ class AppTheme {
         bodyMedium: TextStyle(color: AppStyle.purpleDark),
         bodyLarge: TextStyle(color: AppStyle.purpleDark),
         bodySmall: TextStyle(color: AppStyle.purpleDark),
+      ),
+      listTileTheme: const ListTileThemeData(
+        textColor: AppStyle.purpleDark,
+      ),
+      tabBarTheme: const TabBarTheme(
+        labelColor: AppStyle.purpleDark,
+        unselectedLabelColor: Colors.grey,
+        indicatorColor: AppStyle.purpleDark,
       ));
 
   static final ThemeData themeDark = ThemeData(
       brightness: Brightness.dark,
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppStyle.white,
+      ),
       primaryColor: AppStyle.purpleLight2,
       scaffoldBackgroundColor: AppStyle.purpleDark,
       appBarTheme: const AppBarTheme(
@@ -44,5 +58,13 @@ class AppTheme {
         bodyMedium: TextStyle(color: AppStyle.white),
         bodyLarge: TextStyle(color: AppStyle.white),
         bodySmall: TextStyle(color: AppStyle.white),
+      ),
+      listTileTheme: const ListTileThemeData(
+        textColor: AppStyle.white,
+      ),
+      tabBarTheme: const TabBarTheme(
+        labelColor: AppStyle.white,
+        unselectedLabelColor: Colors.grey,
+        indicatorColor: AppStyle.purpleDark,
       ));
 }

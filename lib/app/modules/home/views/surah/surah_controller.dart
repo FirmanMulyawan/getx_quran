@@ -5,6 +5,8 @@ import 'dart:convert';
 import '../../../../data/models/ayat.dart';
 
 class SurahController extends GetxController {
+  RxBool isDark = false.obs;
+
   Future<List<Surah>> getAllSurah() async {
     Uri url = Uri.parse("https://api.quran.gading.dev/surah");
     var response = await http.get(url);
