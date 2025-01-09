@@ -3,6 +3,8 @@ import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../component/config/app_const.dart';
+import '../../../../component/config/app_style.dart';
 import '../../../data/models/detail_surah.dart' as detail;
 import '../../../data/models/ayat.dart' as s;
 import '../controllers/detail_surah_controller.dart';
@@ -22,27 +24,72 @@ class DetailSurahView extends GetView<DetailSurahController> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Text(
-                    "${surah.name?.transliteration?.id?.toUpperCase()}",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "( ${surah.name?.translation?.id?.toUpperCase()} )",
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const Gap(10),
-                  Text(
-                    "${surah.numberOfVerses} Ayat | ${surah.revelation?.id}",
-                    style: const TextStyle(fontSize: 16),
-                  )
-                ],
+          GestureDetector(
+            onTap: () => Get.dialog(Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(25),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Get.isDarkMode
+                      ? AppStyle.purpleLight2.withOpacity(0.3)
+                      : AppStyle.white,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Tafsir ${surah.name?.transliteration?.id}",
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      surah.tafsir?.id ?? "Tidak ada tafsir pada surah ini",
+                      textAlign: TextAlign.justify,
+                    )
+                  ],
+                ),
+              ),
+            )),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                gradient: const LinearGradient(colors: [
+                  AppStyle.purpleLight1,
+                  AppStyle.purpleDark,
+                ]),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "${surah.name?.transliteration?.id?.toUpperCase()}",
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppStyle.white),
+                    ),
+                    Text(
+                      "( ${surah.name?.translation?.id?.toUpperCase()} )",
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppStyle.white),
+                    ),
+                    const Gap(10),
+                    Text(
+                      "${surah.numberOfVerses} Ayat | ${surah.revelation?.id}",
+                      style:
+                          const TextStyle(fontSize: 16, color: AppStyle.white),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -75,14 +122,29 @@ class DetailSurahView extends GetView<DetailSurahController> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Card(
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppStyle.purpleLight2.withOpacity(0.3),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CircleAvatar(child: Text("${index + 1}")),
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(Get.isDarkMode
+                                            ? AppConst.imageListDark
+                                            : AppConst.imageList),
+                                        fit: BoxFit.contain),
+                                  ),
+                                  child: Center(child: Text("${index + 1}")),
+                                ),
                                 Row(
                                   children: [
                                     IconButton(
@@ -99,9 +161,12 @@ class DetailSurahView extends GetView<DetailSurahController> {
                           ),
                         ),
                         const Gap(20),
-                        Text(
-                          "${ayat?.text?.arab}",
-                          style: const TextStyle(fontSize: 25),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text(
+                            "${ayat?.text?.arab}",
+                            style: const TextStyle(fontSize: 25),
+                          ),
                         ),
                         const Gap(10),
                         Text(

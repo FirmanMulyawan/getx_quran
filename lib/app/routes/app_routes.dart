@@ -8,6 +8,7 @@ abstract class Routes {
   static const detailSurah = _Paths.detailSurah;
   static const searchSurah = _Paths.searchSurah;
   static const lastRead = _Paths.lastRead;
+  static const detailJuz = _Paths.detailJuz;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const detailSurah = '/detail-surah';
   static const searchSurah = '/search-surah';
   static const lastRead = '/last-read';
+  static const detailJuz = '/detail-juz';
 }

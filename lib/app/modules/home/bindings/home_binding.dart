@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
+import '../views/juzz/juzz_controller.dart';
 import '../views/surah/surah_controller.dart';
 
 class HomeBinding extends Bindings {
@@ -11,6 +12,9 @@ class HomeBinding extends Bindings {
     );
     Get.lazyPut<SurahController>(
       () => SurahController(),
+    );
+    Get.lazyPut<JuzzController>(
+      () => JuzzController(),
     );
   }
 }
