@@ -145,17 +145,7 @@ class DetailSurahView extends GetView<DetailSurahController> {
                                   ),
                                   child: Center(child: Text("${index + 1}")),
                                 ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                            Icons.bookmark_add_outlined)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.play_arrow))
-                                  ],
-                                ),
+                                _buttonPlay(ayat?.audio?.primary),
                               ],
                             ),
                           ),
@@ -178,7 +168,7 @@ class DetailSurahView extends GetView<DetailSurahController> {
                         const Gap(25),
                         Text(
                           "${ayat?.translation?.id}",
-                          textAlign: TextAlign.justify,
+                          textAlign: TextAlign.left,
                           style: const TextStyle(fontSize: 18),
                         ),
                         const Gap(50)
@@ -190,5 +180,42 @@ class DetailSurahView extends GetView<DetailSurahController> {
         ],
       ),
     );
+  }
+
+  Widget _buttonPlay(String? audio) {
+    return Obx(() => Row(
+          children: [
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.bookmark_add_outlined)),
+            (controller.audioCondition.value == "stop")
+                ? IconButton(
+                    onPressed: () {
+                      controller.playAudio(audio);
+                    },
+                    icon: const Icon(Icons.play_arrow))
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      (controller.audioCondition.value == "playing")
+                          ? IconButton(
+                              onPressed: () {
+                                controller.pauseAudio();
+                              },
+                              icon: const Icon(Icons.pause))
+                          : IconButton(
+                              onPressed: () {
+                                controller.resumeAudio();
+                              },
+                              icon: const Icon(Icons.play_arrow)),
+                      IconButton(
+                          onPressed: () {
+                            controller.stopAudio();
+                          },
+                          icon: const Icon(Icons.stop))
+                    ],
+                  )
+          ],
+        ));
   }
 }

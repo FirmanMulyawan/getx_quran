@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../../../component/config/app_const.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../data/models/ayat.dart' as ayat;
 import '../../../../data/models/juzz.dart' as juzz;
 import '../../../../routes/app_pages.dart';
 import '../surah/surah_controller.dart';
@@ -33,9 +34,32 @@ class JuzzView extends GetView<JuzzController> {
             itemBuilder: (context, index) {
               juzz.JuzzQuran? detailJuzz = snapshot.data?[index];
 
+              String? nameStart = detailJuzz?.juzStartInfo?.split(" - ").first;
+              String? nameEnd = detailJuzz?.juzEndInfo?.split(" - ").first;
+
+              List<ayat.Surah> rawAllSurahInJuz = [];
+              List<ayat.Surah> allSurahInJuz = [];
+
+              for (var item in surahController.allSurah) {
+                rawAllSurahInJuz.add(item);
+                if (item.name?.transliteration?.id == nameEnd) {
+                  break;
+                }
+              }
+
+              for (var item in rawAllSurahInJuz.reversed.toList()) {
+                allSurahInJuz.add(item);
+                if (item.name?.transliteration?.id == nameStart) {
+                  break;
+                }
+              }
+
               return ListTile(
                 onTap: () {
-                  Get.toNamed(Routes.detailJuz, arguments: detailJuzz);
+                  Get.toNamed(Routes.detailJuz, arguments: {
+                    "juz": detailJuzz,
+                    "surah": allSurahInJuz.reversed.toList()
+                  });
                 },
                 leading: Obx(() => Container(
                       height: 35,
