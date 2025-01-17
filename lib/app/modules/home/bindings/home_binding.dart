@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
+import '../views/bookmark/bookmark_controller.dart';
 import '../views/juzz/juzz_controller.dart';
 import '../views/juzz_v2/juzz_v2_controller.dart';
 import '../views/surah/surah_controller.dart';
@@ -19,6 +20,9 @@ class HomeBinding extends Bindings {
     );
     Get.lazyPut<JuzzV2Controller>(
       () => JuzzV2Controller(),
+    );
+    Get.lazyPut<BookmarkController>(
+      () => BookmarkController(),
     );
   }
 }

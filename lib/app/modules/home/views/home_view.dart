@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
 // import 'juzz/juzz.dart';
+import 'bookmark/bookmark.dart';
 import 'juzz_v2/juzz_v2.dart';
 import 'surah/surah.dart';
 import 'surah/surah_controller.dart';
@@ -152,7 +153,7 @@ class HomeView extends GetView<HomeController> {
                           const SurahView(),
                           // JuzzView(),
                           JuzzV2View(),
-                          const Text("page 3"),
+                          BookmarkView(),
                         ])),
               )
             ],

@@ -338,32 +338,33 @@ class Verse {
   final Translation? translation;
   final Audio? audio;
   final VerseTafsir? tafsir;
+  String? audioCondition;
 
-  Verse({
-    this.number,
-    this.meta,
-    this.text,
-    this.translation,
-    this.audio,
-    this.tafsir,
-  });
+  Verse(
+      {this.number,
+      this.meta,
+      this.text,
+      this.translation,
+      this.audio,
+      this.tafsir,
+      this.audioCondition = "stop"});
 
-  Verse copyWith({
-    Number? number,
-    Meta? meta,
-    Text? text,
-    Translation? translation,
-    Audio? audio,
-    VerseTafsir? tafsir,
-  }) =>
+  Verse copyWith(
+          {Number? number,
+          Meta? meta,
+          Text? text,
+          Translation? translation,
+          Audio? audio,
+          VerseTafsir? tafsir,
+          String? audioCondition}) =>
       Verse(
-        number: number ?? this.number,
-        meta: meta ?? this.meta,
-        text: text ?? this.text,
-        translation: translation ?? this.translation,
-        audio: audio ?? this.audio,
-        tafsir: tafsir ?? this.tafsir,
-      );
+          number: number ?? this.number,
+          meta: meta ?? this.meta,
+          text: text ?? this.text,
+          translation: translation ?? this.translation,
+          audio: audio ?? this.audio,
+          tafsir: tafsir ?? this.tafsir,
+          audioCondition: audioCondition ?? this.audioCondition);
 
   factory Verse.fromJson(Map<String, dynamic> json) => Verse(
         number: json["number"] == null ? null : Number.fromJson(json["number"]),
@@ -385,6 +386,7 @@ class Verse {
         "translation": translation?.toJson(),
         "audio": audio?.toJson(),
         "tafsir": tafsir?.toJson(),
+        "audioCondition": audioCondition
       };
 }
 

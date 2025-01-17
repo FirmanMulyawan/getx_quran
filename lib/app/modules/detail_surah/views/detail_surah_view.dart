@@ -145,7 +145,7 @@ class DetailSurahView extends GetView<DetailSurahController> {
                                   ),
                                   child: Center(child: Text("${index + 1}")),
                                 ),
-                                _buttonPlay(ayat?.audio?.primary),
+                                _buttonPlay(ayat, snapshot.data!, index),
                               ],
                             ),
                           ),
@@ -182,40 +182,74 @@ class DetailSurahView extends GetView<DetailSurahController> {
     );
   }
 
-  Widget _buttonPlay(String? audio) {
-    return Obx(() => Row(
+  Widget _buttonPlay(detail.Verse? ayat, detail.DetailSurah surah, int index) {
+    return GetBuilder<DetailSurahController>(
+      builder: (ctrl) {
+        return Row(
           children: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.defaultDialog(
+                      title: "BOOKMARK",
+                      middleText: "Pilih jenis bookmark",
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            controller.addBookmark(true, surah, ayat, index);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppStyle.purple,
+                          ),
+                          child: const Text(
+                            "LAST READ",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            controller.addBookmark(false, surah, ayat, index);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppStyle.purple,
+                          ),
+                          child: const Text(
+                            "BOOKMARK",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ]);
+                },
                 icon: const Icon(Icons.bookmark_add_outlined)),
-            (controller.audioCondition.value == "stop")
+            (ayat?.audioCondition == "stop")
                 ? IconButton(
                     onPressed: () {
-                      controller.playAudio(audio);
+                      ctrl.playAudio(ayat);
                     },
                     icon: const Icon(Icons.play_arrow))
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      (controller.audioCondition.value == "playing")
+                      (ayat?.audioCondition == "playing")
                           ? IconButton(
                               onPressed: () {
-                                controller.pauseAudio();
+                                ctrl.pauseAudio(ayat);
                               },
                               icon: const Icon(Icons.pause))
                           : IconButton(
                               onPressed: () {
-                                controller.resumeAudio();
+                                ctrl.resumeAudio(ayat);
                               },
                               icon: const Icon(Icons.play_arrow)),
                       IconButton(
                           onPressed: () {
-                            controller.stopAudio();
+                            ctrl.stopAudio(ayat);
                           },
                           icon: const Icon(Icons.stop))
                     ],
                   )
           ],
-        ));
+        );
+      },
+    );
   }
 }
