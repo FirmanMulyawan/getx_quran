@@ -7,10 +7,12 @@ import '../../../../component/config/app_const.dart';
 import '../../../../component/config/app_style.dart';
 import '../../../data/models/detail_surah.dart' as detail;
 import '../../../data/models/ayat.dart' as s;
+import '../../home/controllers/home_controller.dart';
 import '../controllers/detail_surah_controller.dart';
 
 class DetailSurahView extends GetView<DetailSurahController> {
   final s.Surah surah = Get.arguments;
+  final homeController = Get.find<HomeController>();
 
   DetailSurahView({super.key});
   @override
@@ -194,8 +196,10 @@ class DetailSurahView extends GetView<DetailSurahController> {
                       middleText: "Pilih jenis bookmark",
                       actions: [
                         ElevatedButton(
-                          onPressed: () {
-                            controller.addBookmark(true, surah, ayat, index);
+                          onPressed: () async {
+                            await controller.addBookmark(
+                                true, surah, ayat, index);
+                            homeController.update();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppStyle.purple,

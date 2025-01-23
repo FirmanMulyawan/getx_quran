@@ -6,10 +6,12 @@ import 'package:get/get.dart';
 import '../../../../component/config/app_const.dart';
 import '../../../../component/config/app_style.dart';
 import '../../../data/models/detail_surah.dart' as detail;
+import '../../home/controllers/home_controller.dart';
 import '../controllers/detail_juz_controller.dart';
 
 class DetailJuzView extends GetView<DetailJuzController> {
   final Map<String, dynamic>? dataMapPerJuz = Get.arguments;
+  final homeController = Get.find<HomeController>();
 
   DetailJuzView({super.key});
 
@@ -199,8 +201,10 @@ class DetailJuzView extends GetView<DetailJuzController> {
                       middleText: "Pilih jenis bookmark",
                       actions: [
                         ElevatedButton(
-                          onPressed: () {
-                            controller.addBookmark(true, surah, verse, index);
+                          onPressed: () async {
+                            await controller.addBookmark(
+                                true, surah, verse, index);
+                            homeController.update();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppStyle.purple,

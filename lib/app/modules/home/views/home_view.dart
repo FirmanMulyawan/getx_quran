@@ -105,116 +105,120 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget _buttonLastRead() {
-    return FutureBuilder<Map<String, dynamic>?>(
-        future: controller.getLastRead(),
-        builder: (context, snapshot) {
-          final isLoading = snapshot.connectionState == ConnectionState.waiting;
-          Map<String, dynamic>? lastRead = snapshot.data;
+    return GetBuilder<HomeController>(
+      builder: (ctrl) {
+        return FutureBuilder<Map<String, dynamic>?>(
+            future: ctrl.getLastRead(),
+            builder: (context, snapshot) {
+              final isLoading =
+                  snapshot.connectionState == ConnectionState.waiting;
+              Map<String, dynamic>? lastRead = snapshot.data;
 
-          return Skeletonizer(
-            enabled: isLoading,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: const LinearGradient(colors: [
-                    AppStyle.purpleLight1,
-                    AppStyle.purpleDark,
-                  ])),
-              child: Material(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(20),
-                  onLongPress: isLoading
-                      ? null
-                      : () {
-                          if (lastRead != null) {
-                            Get.defaultDialog(
-                                title: "Delete Last Read",
-                                middleText:
-                                    "Are you sure want to delete last read?",
-                                actions: [
-                                  OutlinedButton(
-                                      onPressed: () => Get.back(),
-                                      child: const Text("Cancel")),
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        controller
-                                            .deleteLastRead(lastRead['id']);
-                                      },
-                                      child: const Text("Delete"))
-                                ]);
-                          }
-                        },
-                  onTap: isLoading
-                      ? null
-                      : () {
-                          if (lastRead != null) {}
-                        },
-                  child: Stack(
-                    children: [
-                      Positioned(
-                          bottom: -50,
-                          right: 0,
-                          child: Opacity(
-                            opacity: 0.7,
-                            child: Skeleton.keep(
-                              child: SizedBox(
-                                  width: 200,
-                                  height: 200,
-                                  child: Image.asset(
-                                    AppConst.imageAlquran,
-                                    fit: BoxFit.contain,
-                                  )),
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.menu_book_rounded,
-                                  color: Colors.white,
+              return Skeletonizer(
+                enabled: isLoading,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(20),
+                      gradient: const LinearGradient(colors: [
+                        AppStyle.purpleLight1,
+                        AppStyle.purpleDark,
+                      ])),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onLongPress: isLoading
+                          ? null
+                          : () {
+                              if (lastRead != null) {
+                                Get.defaultDialog(
+                                    title: "Delete Last Read",
+                                    middleText:
+                                        "Are you sure want to delete last read?",
+                                    actions: [
+                                      OutlinedButton(
+                                          onPressed: () => Get.back(),
+                                          child: const Text("Cancel")),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            ctrl.deleteLastRead(lastRead['id']);
+                                          },
+                                          child: const Text("Delete"))
+                                    ]);
+                              }
+                            },
+                      onTap: isLoading
+                          ? null
+                          : () {
+                              if (lastRead != null) {}
+                            },
+                      child: Stack(
+                        children: [
+                          Positioned(
+                              bottom: -50,
+                              right: 0,
+                              child: Opacity(
+                                opacity: 0.7,
+                                child: Skeleton.keep(
+                                  child: SizedBox(
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.asset(
+                                        AppConst.imageAlquran,
+                                        fit: BoxFit.contain,
+                                      )),
                                 ),
-                                Gap(10),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Row(
+                                  children: [
+                                    Icon(
+                                      Icons.menu_book_rounded,
+                                      color: Colors.white,
+                                    ),
+                                    Gap(10),
+                                    Text(
+                                      "Terakhir di baca",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                const Gap(30),
                                 Text(
-                                  "Terakhir di baca",
-                                  style: TextStyle(color: Colors.white),
+                                  lastRead == null
+                                      ? "Belum ada"
+                                      : lastRead['surah']
+                                          .toString()
+                                          .replaceAll("+", "'"),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: AppTheme.textSize2Xl),
+                                ),
+                                Text(
+                                  lastRead == null
+                                      ? "Belum ada data"
+                                      : "Juz ${lastRead['juz']} | Ayat ${lastRead['ayat']}",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ],
                             ),
-                            const Gap(30),
-                            Text(
-                              lastRead == null
-                                  ? "Belum ada"
-                                  : lastRead['surah']
-                                      .toString()
-                                      .replaceAll("+", "'"),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: AppTheme.textSize2Xl),
-                            ),
-                            Text(
-                              lastRead == null
-                                  ? "Belum ada data"
-                                  : "Juz ${lastRead['juz']} | Ayat ${lastRead['ayat']}",
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          );
-        });
+              );
+            });
+      },
+    );
   }
 }
