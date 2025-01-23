@@ -1,5 +1,6 @@
 import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
 import 'package:gap/gap.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../component/config/app_const.dart';
 import '../../../../component/config/app_style.dart';
@@ -55,74 +56,7 @@ class HomeView extends GetView<HomeController> {
                     fontWeight: FontWeight.bold),
               ),
               const Gap(20),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(colors: [
-                      AppStyle.purpleLight1,
-                      AppStyle.purpleDark,
-                    ])),
-                child: Material(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () => Get.toNamed(Routes.lastRead),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                            bottom: -50,
-                            right: 0,
-                            child: Opacity(
-                              opacity: 0.7,
-                              child: SizedBox(
-                                  width: 200,
-                                  height: 200,
-                                  child: Image.asset(
-                                    AppConst.imageAlquran,
-                                    fit: BoxFit.contain,
-                                  )),
-                            )),
-                        const Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.menu_book_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  Gap(10),
-                                  Text(
-                                    "Terakhir di baca",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                              Gap(30),
-                              Text(
-                                "Al-Fatihah",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: AppTheme.textSize2Xl),
-                              ),
-                              Text(
-                                "Juz 1 | Ayat 5",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              _buttonLastRead(),
               const Gap(20),
               TabBar(
                   dividerHeight: 0,
@@ -168,5 +102,119 @@ class HomeView extends GetView<HomeController> {
                 : AppStyle.white)),
       ),
     );
+  }
+
+  Widget _buttonLastRead() {
+    return FutureBuilder<Map<String, dynamic>?>(
+        future: controller.getLastRead(),
+        builder: (context, snapshot) {
+          final isLoading = snapshot.connectionState == ConnectionState.waiting;
+          Map<String, dynamic>? lastRead = snapshot.data;
+
+          return Skeletonizer(
+            enabled: isLoading,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: const LinearGradient(colors: [
+                    AppStyle.purpleLight1,
+                    AppStyle.purpleDark,
+                  ])),
+              child: Material(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onLongPress: isLoading
+                      ? null
+                      : () {
+                          if (lastRead != null) {
+                            Get.defaultDialog(
+                                title: "Delete Last Read",
+                                middleText:
+                                    "Are you sure want to delete last read?",
+                                actions: [
+                                  OutlinedButton(
+                                      onPressed: () => Get.back(),
+                                      child: const Text("Cancel")),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        controller
+                                            .deleteLastRead(lastRead['id']);
+                                      },
+                                      child: const Text("Delete"))
+                                ]);
+                          }
+                        },
+                  onTap: isLoading
+                      ? null
+                      : () {
+                          if (lastRead != null) {}
+                        },
+                  child: Stack(
+                    children: [
+                      Positioned(
+                          bottom: -50,
+                          right: 0,
+                          child: Opacity(
+                            opacity: 0.7,
+                            child: Skeleton.keep(
+                              child: SizedBox(
+                                  width: 200,
+                                  height: 200,
+                                  child: Image.asset(
+                                    AppConst.imageAlquran,
+                                    fit: BoxFit.contain,
+                                  )),
+                            ),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.menu_book_rounded,
+                                  color: Colors.white,
+                                ),
+                                Gap(10),
+                                Text(
+                                  "Terakhir di baca",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                            const Gap(30),
+                            Text(
+                              lastRead == null
+                                  ? "Belum ada"
+                                  : lastRead['surah']
+                                      .toString()
+                                      .replaceAll("+", "'"),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: AppTheme.textSize2Xl),
+                            ),
+                            Text(
+                              lastRead == null
+                                  ? "Belum ada data"
+                                  : "Juz ${lastRead['juz']} | Ayat ${lastRead['ayat']}",
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

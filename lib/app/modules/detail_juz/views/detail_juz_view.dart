@@ -150,7 +150,7 @@ class DetailJuzView extends GetView<DetailJuzController> {
                               ),
                             ],
                           ),
-                          _buttonPlay(verse),
+                          _buttonPlay(verse, surah, index),
                         ],
                       ),
                     ),
@@ -187,13 +187,43 @@ class DetailJuzView extends GetView<DetailJuzController> {
     );
   }
 
-  Widget _buttonPlay(detail.Verse verse) {
+  Widget _buttonPlay(detail.Verse verse, detail.DetailSurah surah, int index) {
     return GetBuilder<DetailJuzController>(
       builder: (ctrl) {
         return Row(
           children: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.defaultDialog(
+                      title: "BOOKMARK",
+                      middleText: "Pilih jenis bookmark",
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            controller.addBookmark(true, surah, verse, index);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppStyle.purple,
+                          ),
+                          child: const Text(
+                            "LAST READ",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            controller.addBookmark(false, surah, verse, index);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppStyle.purple,
+                          ),
+                          child: const Text(
+                            "BOOKMARK",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ]);
+                },
                 icon: const Icon(Icons.bookmark_add_outlined)),
             (verse.audioCondition == "stop")
                 ? IconButton(
